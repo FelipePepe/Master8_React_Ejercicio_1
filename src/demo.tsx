@@ -1,31 +1,40 @@
 import React from "react";
 import { useDebounce } from "use-debounce";
-import { useWhyDidYouUpdate } from "./useWhyDidYouUpdate";
+import { MemberEntity } from "./model";
 
-export const MyComponent = () => {
+const Members: MemberEntity[] = [
+  { name: "María" },
+  { name: "Paco" },
+  { name: "Pepe" },
+  { name: "Penelope" },
+  { name: "Juan" },
+  { name: "Javier" },
+  { name: "Ana" },
+  { name: "Belen" },
+];
+
+export const MyComponent: React.FC = () => {
   const [filter, setFilter] = React.useState("");
 
   const [debounceFilter] = useDebounce(filter, 500);
 
-  const [originalUserCollection, setOriginalUserCollection] = React.useState([
-    { name: "María" },
-    { name: "Paco" },
-    { name: "Pepe" },
-    { name: "Penelope" },
-    { name: "Juan" },
-    { name: "Javier" },
-    { name: "Ana" },
-    { name: "Belen" },
-  ]);
-  const [userCollection, setUserCollection] = React.useState([]);
+  const [userOriginalCollection, setUserOriginalCollection] = React.useState<
+    MemberEntity[]
+  >(Members);
+
+  const [userCollection, setUserCollection] = React.useState<MemberEntity[]>(
+    Members
+  );
+
+  React.useEffect(() => {
+    setUserCollection(Members);
+  }, []);
 
   React.useEffect(() => {
     setUserCollection(
-      originalUserCollection.filter((item) => item.name.includes(filter, 0))
+      userOriginalCollection.filter((item) => item.name.includes(filter, 0))
     );
   }, [debounceFilter]);
-
-  useWhyDidYouUpdate("MyComponent", userCollection);
 
   return (
     <div>
